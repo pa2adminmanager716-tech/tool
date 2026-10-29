@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniTools - Free Online Image & PDF Tools | Fast, Secure & No Install</title>
+    
+    <!-- Meta & SEO Tags -->
+    <meta name="description" content="All-in-one free online toolset for editing, compressing, converting images, and managing PDF files directly in your browser with 100% privacy guarantee.">
+    <meta name="keywords" content="pdf tools, image tools, compress pdf, convert jpg to webp, merge pdf, split pdf, remove bg online, web tools">
+    <meta name="robots" content="index, follow">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f5ff',
+                            100: '#e0ebff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        },
+                        pdf: {
+                            500: '#ef4444',
+                            600: '#dc2626'
+                        },
+                        img: {
+                            500: '#06b6d4',
+                            600: '#0891b2'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Scrollbar & Grid Styles -->
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.4);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col font-sans transition-colors duration-200">
+
+    <!-- Top Leaderboard Ad Space -->
+    <div class="bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-2">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="ad-slot border border-dashed border-slate-300 dark:border-slate-700/70 rounded-xl p-2 text-center bg-slate-200/40 dark:bg-slate-800/40 min-h-[70px] flex flex-col items-center justify-center">
+                <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Advertisement</span>
+                <div class="w-full max-w-3xl h-10 bg-slate-300/40 dark:bg-slate-700/40 rounded flex items-center justify-center text-xs text-slate-500 font-mono">
+                    Leaderboard Banner Space (728x90) — Replace with your Google AdSense Code
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/85 dark:bg-slate-900/85 border-b border-slate-200 dark:border-slate-800 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+            
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center space-x-3 shrink-0">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 via-purple-600 to-pink-500 flex items-center justify-center text-white shadow-lg shadow-brand-500/25">
+                    <i class="fa-solid fa-layer-group text-xl"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-brand-600 via-indigo-500 to-purple-500">OmniTools</span>
+                    <span class="text-[10px] font-bold tracking-widest text-slate-400 uppercase">Image & PDF Suite</span>
+                </div>
+            </a>
+
+            <!-- Search Bar (Desktop) -->
+            <div class="hidden md:flex flex-1 max-w-md relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input type="text" id="headerSearchInput" placeholder="Search 15+ free online tools (e.g. compress, merge, webp)..." 
+                    class="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-800 dark:text-slate-200 placeholder-slate-400">
+            </div>
+
+            <!-- Header Quick Action Controls -->
+            <div class="flex items-center space-x-3">
+                <nav class="hidden lg:flex items-center space-x-5 text-sm font-semibold">
+                    <button onclick="filterCategory('all')" class="text-slate-600 dark:text-slate-300 hover:text-brand-500 transition-colors">All Tools</button>
+                    <button onclick="filterCategory('image')" class="text-slate-600 dark:text-slate-300 hover:text-img-500 transition-colors">Image Tools</button>
+                    <button onclick="filterCategory('pdf')" class="text-slate-600 dark:text-slate-300 hover:text-pdf-500 transition-colors">PDF Tools</button>
+                </nav>
+
+                <!-- Favorite Counter Badge -->
+                <button onclick="filterCategory('favorites')" class="relative p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-amber-500 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" title="View Bookmarked Tools">
+                    <i class="fa-solid fa-star text-base"></i>
+                    <span id="favCount" class="absolute -top-1 -right-1 bg-amber-500 text-slate-950 font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                </button>
+
+                <!-- Theme Switcher -->
+                <button id="themeToggleBtn" aria-label="Toggle Dark/Light Mode" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                    <i class="fa-solid fa-sun hidden dark:block text-amber-400"></i>
+                    <i class="fa-solid fa-moon block dark:hidden text-slate-700"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Search Bar -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative w-full">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input type="text" id="mobileSearchInput" placeholder="Search image & PDF tools..." 
+                    class="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-800 dark:text-slate-200">
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <!-- Hero Section -->
+        <section class="text-center max-w-4xl mx-auto pt-6 pb-2">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/80 border border-brand-200 dark:border-brand-800 text-brand-600 dark:text-brand-300 text-xs font-semibold mb-4 shadow-sm">
+                <i class="fa-solid fa-bolt-lightning text-amber-400"></i> 100% Free • Browser-Based Security • No Limits
+            </div>
+            
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-tight mb-4">
+                Smart & Powerful <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-500 via-indigo-500 to-purple-500">Image & PDF Tools</span>
+            </h1>
+            
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-8">
+                Compress, convert, edit, and optimize your files instantly. All processing happens safely inside your browser — no file uploads to external servers required.
+            </p>
+
+            <!-- Hero Filter Buttons -->
+            <div class="flex flex-wrap items-center justify-center gap-3">
+                <button onclick="filterCategory('all')" id="catBtn-all" class="cat-filter-btn active-cat px-5 py-2.5 rounded-xl font-bold text-sm shadow-md transition-all bg-brand-600 text-white shadow-brand-500/25">
+                    <i class="fa-solid fa-border-all mr-1.5"></i> All Tools
+                </button>
+                <button onclick="filterCategory('image')" id="catBtn-image" class="cat-filter-btn px-5 py-2.5 rounded-xl font-bold text-sm transition-all bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-img-500 hover:text-img-500">
+                    <i class="fa-solid fa-image text-img-500 mr-1.5"></i> Image Tools
+                </button>
+                <button onclick="filterCategory('pdf')" id="catBtn-pdf" class="cat-filter-btn px-5 py-2.5 rounded-xl font-bold text-sm transition-all bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-pdf-500 hover:text-pdf-500">
+                    <i class="fa-solid fa-file-pdf text-pdf-500 mr-1.5"></i> PDF Tools
+                </button>
+                <button onclick="filterCategory('favorites')" id="catBtn-favorites" class="cat-filter-btn px-5 py-2.5 rounded-xl font-bold text-sm transition-all bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-amber-500 hover:text-amber-500">
+                    <i class="fa-solid fa-star text-amber-500 mr-1.5"></i> Favorites (<span id="catFavCount">0</span>)
+                </button>
+            </div>
+        </section>
+
+        <!-- Quick Access / Favorites Section (Visible when user has starred tools) -->
+        <section id="favoritesSection" class="hidden space-y-4 border-b border-slate-200 dark:border-slate-800 pb-8">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-star text-amber-500"></i> Bookmarked Quick Access
+                </h2>
+                <span class="text-xs text-slate-400">Your saved tool shortcuts</span>
+            </div>
+            <div id="favoritesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <!-- Dynamically populated starred cards -->
+            </div>
+        </section>
+
+        <!-- Main Tools Collection Grid Section -->
+        <section class="space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h2 id="sectionTitle" class="text-2xl font-bold text-slate-900 dark:text-white">All Utilities</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Select a utility to launch it instantly in your browser</p>
+                </div>
+                
+                <span id="toolsCountLabel" class="text-xs font-semibold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-3 py-1 rounded-full">
+                    Showing 13 Tools
+                </span>
+            </div>
+
+            <!-- Dynamic Tool Cards Container -->
+            <div id="toolsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                <!-- Cards render dynamically via JavaScript -->
+            </div>
+
+            <!-- No Results Found State -->
+            <div id="noResultsState" class="hidden text-center py-16 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl">
+                <i class="fa-solid fa-magnifying-glass text-4xl text-slate-300 dark:text-slate-700 mb-3"></i>
+                <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">No tools found</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Try tweaking your search term or category filters.</p>
+                <button onclick="resetSearch()" class="mt-4 px-4 py-2 bg-brand-600 text-white font-semibold text-xs rounded-xl shadow">
+                    Reset Search & Filters
+                </button>
+            </div>
+        </section>
+
+        <!-- Middle Ad Space (In-Content Banner) -->
+        <div class="my-8">
+            <div class="ad-slot border border-dashed border-slate-300 dark:border-slate-700/70 rounded-2xl p-4 text-center bg-slate-100/60 dark:bg-slate-900/40 flex flex-col items-center justify-center min-h-[120px]">
+                <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Sponsored Content</span>
+                <div class="w-full h-16 bg-slate-200 dark:bg-slate-800 rounded border border-slate-300 dark:border-slate-700 flex items-center justify-center text-xs text-slate-500 font-mono">
+                    In-Content Horizontal Banner (728x90 or Responsive Native Ad)
+                </div>
+            </div>
+        </div>
+
+        <!-- Features / Why Choose Us Section -->
+        <section class="pt-6">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Why Professionals Choose OmniTools</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">Designed for maximum productivity, absolute privacy, and seamless performance on any device.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Feature 1 -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-brand-500/50 transition-colors">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-xl font-bold mb-4">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 dark:text-slate-200 mb-1">100% Client Privacy</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                        Your confidential PDFs and photos are processed directly in your browser memory. Files never leave your local machine.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-brand-500/50 transition-colors">
+                    <div class="w-12 h-12 rounded-xl bg-brand-500/10 text-brand-500 flex items-center justify-center text-xl font-bold mb-4">
+                        <i class="fa-solid fa-bolt-lightning"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 dark:text-slate-200 mb-1">Blazing Fast</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                        Eliminate cloud upload and download delays. Execute format conversions and compressions instantly inside HTML5 Canvas.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-brand-500/50 transition-colors">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center text-xl font-bold mb-4">
+                        <i class="fa-solid fa-laptop-mobile"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 dark:text-slate-200 mb-1">Mobile & Tablet Ready</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                        Fully responsive user interface tailored for touch inputs, mobile browsers, tablets, and desktop displays.
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-brand-500/50 transition-colors">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center text-xl font-bold mb-4">
+                        <i class="fa-solid fa-infinity"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 dark:text-slate-200 mb-1">No Registration</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                        No credit cards, sign-up forms, or subscriptions required. Unlimited tool usage with complete unrestricted access.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Bottom Footer Ad Banner -->
+    <div class="max-w-7xl mx-auto px-4 w-full my-6">
+        <div class="ad-slot border border-dashed border-slate-300 dark:border-slate-700/70 rounded-xl p-2 text-center bg-slate-200/40 dark:bg-slate-800/40 min-h-[70px] flex flex-col items-center justify-center">
+            <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Advertisement</span>
+            <div class="w-full max-w-3xl h-10 bg-slate-300/40 dark:bg-slate-700/40 rounded flex items-center justify-center text-xs text-slate-500 font-mono">
+                Footer Leaderboard Ad Unit (728x90)
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 pt-12 pb-8 text-xs text-slate-500 dark:text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                
+                <!-- Col 1: Brand Info -->
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-7 h-7 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold text-xs">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <span class="text-base font-bold text-slate-900 dark:text-white">OmniTools</span>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                        Free browser-based media manipulation and document utilities for digital creators, students, and professionals worldwide.
+                    </p>
+                </div>
+
+                <!-- Col 2: Image Tools Quick Links -->
+                <div>
+                    <h4 class="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-3">Popular Image Tools</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-brand-500 transition-colors">Image Compressor</a></li>
+                        <li><a href="#" class="hover:text-brand-500 transition-colors">Background Remover</a></li>
+                        <li><a href="#" class="hover:text-brand-500 transition-colors">PNG to WebP Converter</a></li>
+                        <li><a href="#" class="hover:text-brand-500 transition-colors">Image Resizer & Cropper</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: PDF Tools Quick Links -->
+                <div>
+                    <h4 class="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-3">Popular PDF Tools</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-brand-500 transition-colors">Merge PDF Documents</a></li>
+                        <li><a href="#" class="hover:text-brand-500 transition-colors">Split PDF Pages</a></li>
+                        <li><a href="#" class="hover:text-brand-500 transition-colors">PDF to Word Conversion</a></li>
+                        <li><a href="#" class="hover:text-brand-500 transition-colors">Compress PDF Size</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Newsletter -->
+                <div>
+                    <h4 class="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-3">Stay Updated</h4>
+                    <p class="text-xs mb-3">Subscribe to receive updates when new productivity tools are added.</p>
+                    <form onsubmit="event.preventDefault(); alert('Thank you for subscribing to OmniTools updates!');" class="flex gap-2">
+                        <input type="email" placeholder="Your email address" required class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-brand-500">
+                        <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white font-semibold px-3 py-2 rounded-lg transition-colors shrink-0">Join</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Footer Bottom Bar -->
+            <div class="pt-6 border-t border-slate-200 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p>&copy; 2026 OmniTools Inc. All rights reserved. Client-side privacy guaranteed.</p>
+                <div class="flex space-x-6 text-xs">
+                    <a href="#" class="hover:text-brand-500 transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-brand-500 transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-brand-500 transition-colors">Contact Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Tools Master Database
+        const toolsDatabase = [
+            // Image Tools
+            {
+                id: 'img-compressor',
+                name: 'Image Compressor Pro',
+                category: 'image',
+                description: 'Reduce JPG, PNG, and WebP file sizes drastically while maintaining crisp quality.',
+                icon: 'fa-solid fa-compress',
+                iconBg: 'bg-cyan-500/10 text-cyan-500 border-cyan-500/20',
+                badge: 'Popular',
+                badgeColor: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+            },
+            {
+                id: 'bg-remover',
+                name: 'Background Remover',
+                category: 'image',
+                description: 'Automatically erase background behind subjects, people, or products in one click.',
+                icon: 'fa-solid fa-wand-magic-sparkles',
+                iconBg: 'bg-purple-500/10 text-purple-500 border-purple-500/20',
+                badge: 'AI Powered',
+                badgeColor: 'bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300'
+            },
+            {
+                id: 'img-converter',
+                name: 'Format Converter',
+                category: 'image',
+                description: 'Convert images seamlessly between PNG, JPEG, WebP, GIF, and SVG formats.',
+                icon: 'fa-solid fa-arrows-rotate',
+                iconBg: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
+                badge: 'Essential',
+                badgeColor: 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300'
+            },
+            {
+                id: 'img-resizer',
+                name: 'Image Resizer & Cropper',
+                category: 'image',
+                description: 'Change pixel dimensions or crop photos with preset social media aspect ratios.',
+                icon: 'fa-solid fa-crop-simple',
+                iconBg: 'bg-teal-500/10 text-teal-500 border-teal-500/20',
+                badge: '',
+                badgeColor: ''
+            },
+            {
+                id: 'watermark-gen',
+                name: 'Watermark Generator',
+                category: 'image',
+                description: 'Add custom logos or text watermarks across batch images to protect copyright.',
+                icon: 'fa-solid fa-copyright',
+                iconBg: 'bg-amber-500/10 text-amber-500 border-amber-500/20',
+                badge: '',
+                badgeColor: ''
+            },
+            {
+                id: 'img-upscaler',
+                name: 'Photo Upscaler & Sharpener',
+                category: 'image',
+                description: 'Enhance low-resolution photos and fix blurriness with canvas interpolation.',
+                icon: 'fa-solid fa-up-right-and-down-left-from-center',
+                iconBg: 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20',
+                badge: 'New',
+                badgeColor: 'bg-brand-100 text-brand-800 dark:bg-brand-950 dark:text-brand-300'
+            },
+
+            // PDF Tools
+            {
+                id: 'pdf-merge',
+                name: 'Merge PDF Documents',
+                category: 'pdf',
+                description: 'Combine multiple PDF files into one single organized PDF document.',
+                icon: 'fa-solid fa-object-group',
+                iconBg: 'bg-red-500/10 text-red-500 border-red-500/20',
+                badge: 'Popular',
+                badgeColor: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+            },
+            {
+                id: 'pdf-split',
+                name: 'Split & Extract PDF Pages',
+                category: 'pdf',
+                description: 'Separate individual PDF pages or extract custom page ranges into new files.',
+                icon: 'fa-solid fa-scissors',
+                iconBg: 'bg-rose-500/10 text-rose-500 border-rose-500/20',
+                badge: '',
+                badgeColor: ''
+            },
+            {
+                id: 'pdf-compress',
+                name: 'Compress PDF Size',
+                category: 'pdf',
+                description: 'Shrink large PDF file sizes while optimizing visual font & graphic fidelity.',
+                icon: 'fa-solid fa-file-zipper',
+                iconBg: 'bg-orange-500/10 text-orange-500 border-orange-500/20',
+                badge: 'Essential',
+                badgeColor: 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300'
+            },
+            {
+                id: 'pdf-to-word',
+                name: 'PDF to Word Converter',
+                category: 'pdf',
+                description: 'Transform uneditable PDF documents into fully customizable DOCX Word files.',
+                icon: 'fa-solid fa-file-word',
+                iconBg: 'bg-blue-600/10 text-blue-600 border-blue-600/20',
+                badge: 'Hot',
+                badgeColor: 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+            },
+            {
+                id: 'word-to-pdf',
+                name: 'Word to PDF Converter',
+                category: 'pdf',
+                description: 'Convert Microsoft Word DOCX files into universally readable PDF format.',
+                icon: 'fa-solid fa-file-pdf',
+                iconBg: 'bg-red-600/10 text-red-600 border-red-600/20',
+                badge: '',
+                badgeColor: ''
+            },
+            {
+                id: 'pdf-protect',
+                name: 'Protect / Unlock PDF',
+                category: 'pdf',
+                description: 'Encrypt PDFs with passwords or unlock permissions on password-protected files.',
+                icon: 'fa-solid fa-lock',
+                iconBg: 'bg-slate-500/10 text-slate-600 dark:text-slate-300 border-slate-500/20',
+                badge: '',
+                badgeColor: ''
+            },
+            {
+                id: 'pdf-reorder',
+                name: 'Reorder & Rotate Pages',
+                category: 'pdf',
+                description: 'Drag-and-drop to reorder, delete, or rotate pages inside your PDF document.',
+                icon: 'fa-solid fa-rotate',
+                iconBg: 'bg-amber-500/10 text-amber-600 border-amber-500/20',
+                badge: '',
+                badgeColor: ''
+            }
+        ];
+
+        // State Tracking
+        let currentCategory = 'all';
+        let searchQuery = '';
+        let favorites = JSON.parse(localStorage.getItem('omni_favorites') || '[]');
+
+        // DOM Element Cache
+        const toolsGrid = document.getElementById('toolsGrid');
+        const favoritesGrid = document.getElementById('favoritesGrid');
+        const favoritesSection = document.getElementById('favoritesSection');
+        const noResultsState = document.getElementById('noResultsState');
+        const headerSearchInput = document.getElementById('headerSearchInput');
+        const mobileSearchInput = document.getElementById('mobileSearchInput');
+        const sectionTitle = document.getElementById('sectionTitle');
+        const toolsCountLabel = document.getElementById('toolsCountLabel');
+        const favCount = document.getElementById('favCount');
+        const catFavCount = document.getElementById('catFavCount');
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+
+        // Dark/Light Theme Switching
+        themeToggleBtn.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('omni_theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        });
+
+        if (localStorage.getItem('omni_theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+        }
+
+        // Search Handlers
+        [headerSearchInput, mobileSearchInput].forEach(input => {
+            input.addEventListener('input', (e) => {
+                searchQuery = e.target.value.toLowerCase().trim();
+                renderTools();
+            });
+        });
+
+        // Toggle Favorite Status
+        window.toggleFavorite = function(toolId, event) {
+            event.stopPropagation();
+            if (favorites.includes(toolId)) {
+                favorites = favorites.filter(id => id !== toolId);
+            } else {
+                favorites.push(toolId);
+            }
+            localStorage.setItem('omni_favorites', JSON.stringify(favorites));
+            updateFavBadges();
+            renderTools();
+        };
+
+        function updateFavBadges() {
+            favCount.textContent = favorites.length;
+            catFavCount.textContent = favorites.length;
+            
+            // Render top quick access section if items exist
+            if (favorites.length > 0) {
+                favoritesSection.classList.remove('hidden');
+                renderFavoritesGrid();
+            } else {
+                favoritesSection.classList.add('hidden');
+            }
+        }
+
+        // Category Filter Changer
+        window.filterCategory = function(cat) {
+            currentCategory = cat;
+
+            // Highlight Active Category Button
+            document.querySelectorAll('.cat-filter-btn').forEach(btn => {
+                btn.className = "cat-filter-btn px-5 py-2.5 rounded-xl font-bold text-sm transition-all bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-brand-500";
+            });
+
+            const activeBtn = document.getElementById(`catBtn-${cat}`);
+            if (activeBtn) {
+                if (cat === 'image') {
+                    activeBtn.className = "cat-filter-btn px-5 py-2.5 rounded-xl font-bold text-sm shadow-md transition-all bg-img-600 text-white shadow-img-500/20";
+                } else if (cat === 'pdf') {
+                    activeBtn.className = "cat-filter-btn px-5 py-2.5 rounded-xl font-bold text-sm shadow-md transition-all bg-pdf-600 text-white shadow-pdf-500/20";
+                } else if (cat === 'favorites') {
+                    activeBtn.className = "cat-filter-btn px-5 py-2.5 rounded-xl font-bold text-sm shadow-md transition-all bg-amber-500 text-slate-950 shadow-amber-500/20";
+                } else {
+                    activeBtn.className = "cat-filter-btn px-5 py-2.5 rounded-xl font-bold text-sm shadow-md transition-all bg-brand-600 text-white shadow-brand-500/25";
+                }
+            }
+
+            // Update Dynamic Section Title
+            if (cat === 'image') sectionTitle.textContent = "Image Utilities";
+            else if (cat === 'pdf') sectionTitle.textContent = "PDF Utilities";
+            else if (cat === 'favorites') sectionTitle.textContent = "Your Favorite Tools";
+            else sectionTitle.textContent = "All Utilities";
+
+            renderTools();
+        };
+
+        window.resetSearch = function() {
+            headerSearchInput.value = '';
+            mobileSearchInput.value = '';
+            searchQuery = '';
+            filterCategory('all');
+        };
+
+        // Render Favorites Shelf
+        function renderFavoritesGrid() {
+            const favTools = toolsDatabase.filter(tool => favorites.includes(tool.id));
+            favoritesGrid.innerHTML = favTools.map(tool => createToolCardHtml(tool, true)).join('');
+        }
+
+        // Render Main Grid
+        function renderTools() {
+            let filtered = toolsDatabase.filter(tool => {
+                const matchesCat = (currentCategory === 'all') || 
+                                   (currentCategory === tool.category) || 
+                                   (currentCategory === 'favorites' && favorites.includes(tool.id));
+
+                const matchesSearch = tool.name.toLowerCase().includes(searchQuery) || 
+                                      tool.description.toLowerCase().includes(searchQuery) ||
+                                      tool.category.toLowerCase().includes(searchQuery);
+
+                return matchesCat && matchesSearch;
+            });
+
+            toolsCountLabel.textContent = `Showing ${filtered.length} ${filtered.length === 1 ? 'Tool' : 'Tools'}`;
+
+            if (filtered.length === 0) {
+                toolsGrid.innerHTML = '';
+                noResultsState.classList.remove('hidden');
+            } else {
+                noResultsState.classList.add('hidden');
+                toolsGrid.innerHTML = filtered.map(tool => createToolCardHtml(tool, false)).join('');
+            }
+        }
+
+        // Tool Card Component Generator
+        function createToolCardHtml(tool, isFavShelf) {
+            const isStarred = favorites.includes(tool.id);
+            return `
+                <div onclick="launchTool('${tool.id}')" class="group cursor-pointer bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-brand-500/60 dark:hover:border-brand-500/60 rounded-2xl p-5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between relative overflow-hidden">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="w-12 h-12 rounded-xl border ${tool.iconBg} flex items-center justify-center text-xl font-bold group-hover:scale-110 transition-transform">
+                                <i class="${tool.icon}"></i>
+                            </div>
+                            
+                            <div class="flex items-center space-x-1.5">
+                                ${tool.badge ? `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${tool.badgeColor}">${tool.badge}</span>` : ''}
+                                <button onclick="toggleFavorite('${tool.id}', event)" class="p-1.5 text-slate-300 hover:text-amber-500 dark:text-slate-600 dark:hover:text-amber-400 transition-colors" title="${isStarred ? 'Unstar tool' : 'Star tool'}">
+                                    <i class="${isStarred ? 'fa-solid text-amber-500' : 'fa-regular'} fa-star text-base"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="font-bold text-slate-800 dark:text-slate-100 group-hover:text-brand-500 transition-colors flex items-center gap-1.5">
+                                ${tool.name}
+                            </h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mt-1">
+                                ${tool.description}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 mt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold text-brand-600 dark:text-brand-400">
+                        <span class="capitalize text-[11px] font-bold text-slate-400">${tool.category} Tool</span>
+                        <span class="flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                            Open Tool <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Tool Launch Action Handler
+        window.launchTool = function(toolId) {
+            // Check if user is clicking image compressor or mock notification for other tools
+            if (toolId === 'img-compressor') {
+                // If this is embedded in a multi-page app, route directly or notify user
+                alert("Launching Image Compressor Pro...");
+            } else {
+                alert(`Opening ${toolId.toUpperCase()} tool. (Utility module interface ready for integration)`);
+            }
+        };
+
+        // Initial Initialization On Page Load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateFavBadges();
+            renderTools();
+        });
+    </script>
+</body>
+</html>
