@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Online Image Compressor - Reduce Image Size Without Losing Quality</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Free Online Image Compressor - Reduce Image Size Without Losing Quality">
+    <meta name="description" content="Compress JPEG, PNG, and WebP images online instantly for free. Adjust quality, resize dimensions, compare results live, and download compressed images directly in your browser. 100% private & secure.">
+    <meta name="keywords" content="image compressor, reduce image size, optimize photos, convert image to webp, compress png, compress jpeg, online image optimizer, client-side image compression">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="ImageCompressor Pro">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://example.com/image-compressor">
+    <meta property="og:title" content="Free Online Image Compressor - Fast & Secure Browser-Based Tool">
+    <meta property="og:description" content="Compress PNG, JPG, and WebP files instantly with live comparison and format conversion. 100% free and private.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&auto=format&fit=crop&q=80">
+
+    <!-- Twitter Card -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Free Online Image Compressor">
+    <meta property="twitter:description" content="Optimize images instantly in your browser with real-time preview and quality control.">
+    <meta property="twitter:image" content="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&auto=format&fit=crop&q=80">
+
+    <!-- Schema.org JSON-LD Structured Data for WebApplication SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "ImageCompressor Pro",
+      "url": "https://example.com/image-compressor",
+      "description": "A high-performance client-side tool to compress, resize, and convert JPEG, PNG, and WebP images with real-time preview.",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google AdSense Script - Replace CA-PUB-XXXXXXXXXX with your actual AdSense Publisher ID -->
+    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
+    <style>
+        /* Custom scrollbars & canvas grid background */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(100, 116, 139, 0.5);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.8);
+        }
+        .checkerboard-bg {
+            background-image: linear-gradient(45deg, #e5e7eb 25%, transparent 25%), 
+                              linear-gradient(-45deg, #e5e7eb 25%, transparent 25%), 
+                              linear-gradient(45deg, transparent 75%, #e5e7eb 75%), 
+                              linear-gradient(-45deg, transparent 75%, #e5e7eb 75%);
+            background-size: 16px 16px;
+            background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+        }
+        .dark .checkerboard-bg {
+            background-image: linear-gradient(45deg, #1e293b 25%, transparent 25%), 
+                              linear-gradient(-45deg, #1e293b 25%, transparent 25%), 
+                              linear-gradient(45deg, transparent 75%, #1e293b 75%), 
+                              linear-gradient(-45deg, transparent 75%, #1e293b 75%);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col font-sans transition-colors duration-200">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-brand-500/30">
+                    <i class="fa-solid fa-compress text-xl"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-cyan-500">OptiCompress</span>
+                    <span class="text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 dark:bg-brand-900/50 dark:text-brand-300 font-semibold ml-1">Pro</span>
+                </div>
+            </div>
+
+            <!-- Theme Toggle & Navigation Links -->
+            <div class="flex items-center space-x-4">
+                <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                    <a href="#tool" class="hover:text-brand-500 transition-colors">Compressor</a>
+                    <a href="#features" class="hover:text-brand-500 transition-colors">Features</a>
+                    <a href="#faq" class="hover:text-brand-500 transition-colors">FAQ</a>
+                </nav>
+
+                <button id="themeToggle" aria-label="Toggle Theme" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                    <i class="fa-solid fa-sun hidden dark:block text-amber-400"></i>
+                    <i class="fa-solid fa-moon block dark:hidden text-slate-700"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Top Advertisement Slot Header Banner (728x90 responsive) -->
+    <div class="max-w-7xl mx-auto w-full px-4 pt-4">
+        <div class="ad-container bg-slate-200/50 dark:bg-slate-800/40 border border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-2 text-center text-xs text-slate-400 min-h-[90px] flex flex-col items-center justify-center relative overflow-hidden">
+            <span class="mb-1 font-semibold text-slate-500 dark:text-slate-400">Advertisement</span>
+            
+            <!-- GOOGLE ADSENSE CODE PLACEHOLDER BELOW -->
+            <!-- 
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                 data-ad-slot="1234567890"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            -->
+
+            <div class="hidden sm:flex items-center justify-center w-full h-16 bg-slate-300/30 dark:bg-slate-700/30 rounded border border-slate-300 dark:border-slate-600">
+                <p class="text-slate-500 dark:text-slate-400 font-mono">AdSpace Header Banner (728x90) — Replace with your AdSense Code</p>
+            </div>
+            <div class="sm:hidden flex items-center justify-center w-full h-12 bg-slate-300/30 dark:bg-slate-700/30 rounded border border-slate-300 dark:border-slate-600">
+                <p class="text-slate-500 dark:text-slate-400 font-mono text-[10px]">AdSpace Mobile (320x50)</p>
+            </div>
+        </div>
+    </div>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <!-- Hero Title Section -->
+        <section id="tool" class="text-center max-w-3xl mx-auto mb-8">
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-3">
+                Free Smart <span class="text-brand-500">Image Compression</span> Tool
+            </h1>
+            <p class="text-slate-600 dark:text-slate-400 text-base sm:text-lg">
+                Optimize JPEG, PNG, and WebP images directly in your browser. Fast, 100% private, with real-time quality adjustment and zero server uploads.
+            </p>
+        </section>
+
+        <!-- Main Workspace Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+            <!-- Left/Main Controls & Dropzone Panel -->
+            <div class="lg:col-span-8 space-y-6">
+
+                <!-- Drag and Drop Area -->
+                <div id="dropZone" class="relative group cursor-pointer border-2 border-dashed border-brand-500/40 dark:border-brand-500/30 hover:border-brand-500 bg-brand-50/50 dark:bg-slate-900/50 hover:bg-brand-50 dark:hover:bg-slate-900 transition-all duration-200 rounded-2xl p-8 text-center flex flex-col items-center justify-center min-h-[220px]">
+                    <input type="file" id="fileInput" multiple accept="image/png, image/jpeg, image/webp" class="hidden">
+                    <div class="w-16 h-16 rounded-2xl bg-brand-500/10 dark:bg-brand-500/20 text-brand-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-cloud-arrow-up text-3xl"></i>
+                    </div>
+                    <h2 class="text-lg font-bold text-slate-800 dark:text-slate-200 mb-1">
+                        Drag & Drop image files here
+                    </h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">
+                        or <span class="text-brand-500 font-semibold underline underline-offset-2">browse from your computer</span>
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-2 text-xs text-slate-400 dark:text-slate-500">
+                        <span class="px-2.5 py-1 bg-slate-200/60 dark:bg-slate-800/60 rounded-full">PNG</span>
+                        <span class="px-2.5 py-1 bg-slate-200/60 dark:bg-slate-800/60 rounded-full">JPG / JPEG</span>
+                        <span class="px-2.5 py-1 bg-slate-200/60 dark:bg-slate-800/60 rounded-full">WEBP</span>
+                        <span class="px-2.5 py-1 bg-slate-200/60 dark:bg-slate-800/60 rounded-full">Batch Supported</span>
+                    </div>
+                </div>
+
+                <!-- Global Compression Settings Box (Visible after file upload or initially disabled) -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <h3 class="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-sliders text-brand-500"></i> Optimization Controls
+                        </h3>
+                        <button id="resetAllBtn" class="text-xs text-slate-500 hover:text-red-500 transition-colors flex items-center gap-1 font-medium">
+                            <i class="fa-solid fa-rotate-right"></i> Reset Settings
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Quality Slider -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-sm font-medium">
+                                <label for="qualityRange" class="text-slate-700 dark:text-slate-300">Image Quality</label>
+                                <span id="qualityVal" class="text-brand-600 dark:text-brand-400 font-bold bg-brand-50 dark:bg-brand-950/60 px-2 py-0.5 rounded text-xs border border-brand-200 dark:border-brand-800">80%</span>
+                            </div>
+                            <input type="range" id="qualityRange" min="5" max="100" value="80" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-500">
+                            <p class="text-[11px] text-slate-400">Lower quality reduces file size further. Recommended: 75% - 85%.</p>
+                        </div>
+
+                        <!-- Target Format Selector -->
+                        <div class="space-y-2">
+                            <label for="formatSelect" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Convert Format</label>
+                            <select id="formatSelect" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                <option value="original">Keep Original Format</option>
+                                <option value="image/jpeg">Convert to JPEG (.jpg)</option>
+                                <option value="image/webp">Convert to WebP (.webp)</option>
+                                <option value="image/png">Convert to PNG (.png)</option>
+                            </select>
+                            <p class="text-[11px] text-slate-400">WebP offers superior compression for web performance.</p>
+                        </div>
+
+                        <!-- Resize Max Dimensions -->
+                        <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-100 dark:border-slate-800/60">
+                            <div>
+                                <label for="maxWidth" class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Max Width (px, Optional)</label>
+                                <input type="number" id="maxWidth" placeholder="e.g. 1920 (Auto aspect ratio)" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            </div>
+                            <div>
+                                <label for="maxHeight" class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Max Height (px, Optional)</label>
+                                <input type="number" id="maxHeight" placeholder="e.g. 1080 (Auto aspect ratio)" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Bar (Batch Actions) -->
+                <div id="batchActionsBar" class="hidden flex-wrap items-center justify-between gap-3 bg-brand-50 dark:bg-slate-900 border border-brand-200 dark:border-slate-800 p-4 rounded-xl">
+                    <div class="flex items-center space-x-2">
+                        <span id="imageCountBadge" class="bg-brand-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">0 Images</span>
+                        <span class="text-xs text-slate-600 dark:text-slate-400 font-medium" id="totalSavingsText">Total Saved: 0 KB</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button id="clearAllImagesBtn" class="px-3 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg transition-colors">
+                            Clear List
+                        </button>
+                        <button id="downloadAllBtn" class="px-4 py-2 text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-lg shadow-md shadow-brand-500/20 transition-colors flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-zipper"></i> Download All
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Preview / Comparison Container -->
+                <div id="imageListContainer" class="space-y-6">
+                    <!-- Dynamic preview cards will be injected here via JS -->
+                    <div id="emptyState" class="text-center py-12 border border-slate-200 dark:border-slate-800/80 rounded-2xl bg-white/50 dark:bg-slate-900/30">
+                        <i class="fa-regular fa-image text-4xl text-slate-300 dark:text-slate-700 mb-2"></i>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">No images uploaded yet. Drop an image above to start optimizing!</p>
+                    </div>
+                </div>
+
+                <!-- Pre-Download In-Content Banner Slot -->
+                <div class="ad-container bg-slate-200/50 dark:bg-slate-800/40 border border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-2 text-center text-xs text-slate-400 min-h-[90px] flex flex-col items-center justify-center relative overflow-hidden my-4">
+                    <span class="mb-1 font-semibold text-slate-500 dark:text-slate-400">Sponsored Link</span>
+                    <!-- ADSENSE CODE BANNER -->
+                    <div class="w-full h-16 bg-slate-300/30 dark:bg-slate-700/30 rounded border border-slate-300 dark:border-slate-600 flex items-center justify-center">
+                        <p class="text-slate-500 dark:text-slate-400 font-mono text-xs">AdSpace In-Content / Pre-Download Banner (728x90)</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Sidebar: Monetization & Information Panel -->
+            <div class="lg:col-span-4 space-y-6">
+
+                <!-- Sidebar Ad Unit (300x250 Medium Rectangle) -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm text-center">
+                    <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-2">Advertisement</span>
+                    
+                    <div class="ad-container bg-slate-100 dark:bg-slate-800 border border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-2 min-h-[250px] flex flex-col items-center justify-center">
+                        <!-- GOOGLE ADSENSE MEDIUM RECTANGLE CODE PLACEHOLDER -->
+                        <!-- 
+                        <ins class="adsbygoogle"
+                             style="display:inline-block;width:300px;height:250px"
+                             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                             data-ad-slot="0987654321"></ins>
+                        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                        -->
+                        <div class="w-[300px] max-w-full h-[250px] bg-slate-200/60 dark:bg-slate-700/50 rounded-lg flex flex-col items-center justify-center p-4 border border-slate-300 dark:border-slate-600">
+                            <i class="fa-rectangle-ad text-3xl text-slate-400 mb-2"></i>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 font-mono text-center">AdSpace Sidebar (300x250 / Sticky Banner)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats / Feature Highlights Widget -->
+                <div class="bg-gradient-to-br from-brand-600 to-cyan-600 rounded-2xl p-5 text-white shadow-lg">
+                    <h4 class="font-bold text-lg mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved"></i> 100% Client-Side Privacy
+                    </h4>
+                    <p class="text-xs text-brand-100 leading-relaxed mb-4">
+                        Your images never touch an external server or cloud network. All compression and resizing happens directly inside your web browser memory.
+                    </p>
+                    <div class="space-y-2 text-xs">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-bolt text-yellow-300"></i>
+                            <span>Ultra-fast HTML5 Canvas processing</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-lock text-emerald-300"></i>
+                            <span>Zero data logging or privacy risks</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-download text-cyan-200"></i>
+                            <span>No download bandwidth limits</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Sticky Ad Space -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm text-center">
+                    <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-2">Sponsored Content</span>
+                    <div class="ad-container bg-slate-100 dark:bg-slate-800 border border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-2 min-h-[200px] flex items-center justify-center">
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-mono text-center">AdSpace Vertical / Skyscraper (300x200)</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SEO Article & Information Section -->
+        <section id="features" class="mt-16 pt-12 border-t border-slate-200 dark:border-slate-800">
+            <div class="max-w-4xl mx-auto space-y-12">
+                
+                <!-- Introduction Article -->
+                <article class="prose dark:prose-invert max-w-none">
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+                        Why Use Our Free Online Image Compressor?
+                    </h2>
+                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                        In today's fast-paced web environment, page speed and visual fidelity are paramount. Large, uncompressed images slow down page load times, negatively impact user experience, and hinder search engine optimization (SEO) performance. <strong>OptiCompress Pro</strong> solves this by allowing users to instantly reduce file sizes for JPG, PNG, and WebP formats without compromising clarity.
+                    </p>
+                </article>
+
+                <!-- Key Features Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
+                        <div class="w-10 h-10 rounded-lg bg-brand-500/10 text-brand-500 flex items-center justify-center mb-3 text-lg font-bold">
+                            <i class="fa-solid fa-sliders"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 dark:text-slate-200 mb-1">Lossy & Lossless Control</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Fine-tune the compression ratio slider dynamically to achieve the exact target file size and aesthetic quality required.
+                        </p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center mb-3 text-lg font-bold">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 dark:text-slate-200 mb-1">Instant WebP Conversion</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Convert bulky PNG and JPEG images to Google's next-generation WebP format to save up to 80% more bandwidth.
+                        </p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
+                        <div class="w-10 h-10 rounded-lg bg-purple-500/10 text-purple-500 flex items-center justify-center mb-3 text-lg font-bold">
+                            <i class="fa-solid fa-expand"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 dark:text-slate-200 mb-1">Dimension Capping</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Cap maximum width and height dimensions while preserving the original aspect ratio automatically.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Frequently Asked Questions (FAQ Section) -->
+                <div id="faq" class="space-y-6">
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white text-center mb-6">
+                        Frequently Asked Questions (FAQ)
+                    </h2>
+
+                    <div class="space-y-4">
+                        <details class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 [&_summary::-webkit-details-marker]:hidden cursor-pointer">
+                            <summary class="flex items-center justify-between font-semibold text-slate-800 dark:text-slate-200">
+                                <span>Is my uploaded data safe and private?</span>
+                                <span class="transition group-open:rotate-180">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </span>
+                            </summary>
+                            <p class="mt-3 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                                Absolutely. All image compression and file modifications are performed locally inside your web browser using HTML5 Canvas technology. No files or media are sent to any external server.
+                            </p>
+                        </details>
+
+                        <details class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 [&_summary::-webkit-details-marker]:hidden cursor-pointer">
+                            <summary class="flex items-center justify-between font-semibold text-slate-800 dark:text-slate-200">
+                                <span>How much can I reduce my image size?</span>
+                                <span class="transition group-open:rotate-180">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </span>
+                            </summary>
+                            <p class="mt-3 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                                Depending on the original image type, format, and compression setting, file size reductions range between 30% and 90%. Converting standard JPEG or PNG files to modern WebP offers the highest compression efficiency.
+                            </p>
+                        </details>
+
+                        <details class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 [&_summary::-webkit-details-marker]:hidden cursor-pointer">
+                            <summary class="flex items-center justify-between font-semibold text-slate-800 dark:text-slate-200">
+                                <span>Is this image compressor completely free?</span>
+                                <span class="transition group-open:rotate-180">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </span>
+                            </summary>
+                            <p class="mt-3 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                                Yes! OptiCompress Pro is 100% free with no hidden subscriptions, bandwidth limitations, or account signup requirements.
+                            </p>
+                        </details>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Banner Ad Slot -->
+    <div class="max-w-7xl mx-auto w-full px-4 mb-6">
+        <div class="ad-container bg-slate-200/50 dark:bg-slate-800/40 border border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-2 text-center text-xs text-slate-400 min-h-[90px] flex flex-col items-center justify-center relative overflow-hidden">
+            <span class="mb-1 font-semibold text-slate-500 dark:text-slate-400">Advertisement</span>
+            <div class="w-full h-16 bg-slate-300/30 dark:bg-slate-700/30 rounded border border-slate-300 dark:border-slate-600 flex items-center justify-center">
+                <p class="text-slate-500 dark:text-slate-400 font-mono text-xs">AdSpace Footer Responsive Banner (728x90)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-8 text-xs text-slate-500 dark:text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-compress text-brand-500 text-base"></i>
+                <span class="font-bold text-slate-700 dark:text-slate-300">OptiCompress Pro</span>
+                <span>&copy; 2026. All rights reserved.</span>
+            </div>
+            <div class="flex space-x-6 text-slate-400">
+                <a href="#" class="hover:text-brand-500 transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-brand-500 transition-colors">Terms of Service</a>
+                <a href="#" class="hover:text-brand-500 transition-colors">Contact Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // State Management
+        let imagesData = [];
+
+        // DOM Elements
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const qualityRange = document.getElementById('qualityRange');
+        const qualityVal = document.getElementById('qualityVal');
+        const formatSelect = document.getElementById('formatSelect');
+        const maxWidthInput = document.getElementById('maxWidth');
+        const maxHeightInput = document.getElementById('maxHeight');
+        const imageListContainer = document.getElementById('imageListContainer');
+        const emptyState = document.getElementById('emptyState');
+        const resetAllBtn = document.getElementById('resetAllBtn');
+        const batchActionsBar = document.getElementById('batchActionsBar');
+        const imageCountBadge = document.getElementById('imageCountBadge');
+        const totalSavingsText = document.getElementById('totalSavingsText');
+        const downloadAllBtn = document.getElementById('downloadAllBtn');
+        const clearAllImagesBtn = document.getElementById('clearAllImagesBtn');
+
+        // Dark/Light Theme Switching
+        themeToggleBtn.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        });
+
+        // Initialize Theme from Preferences
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+        }
+
+        // Drag & Drop Listeners
+        dropZone.addEventListener('click', () => fileInput.click());
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropZone.classList.add('border-brand-500', 'bg-brand-100/50', 'dark:bg-slate-800');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('border-brand-500', 'bg-brand-100/50', 'dark:bg-slate-800');
+            }, false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+            fileInput.value = ''; // Reset input
+        });
+
+        // Event Listeners for Global Controls
+        qualityRange.addEventListener('input', (e) => {
+            qualityVal.textContent = e.target.value + '%';
+            recompressAllImages();
+        });
+
+        formatSelect.addEventListener('change', ()value => {
+            recompressAllImages();
+        });
+
+        maxWidthInput.addEventListener('input', debounce(recompressAllImages, 300));
+        maxHeightInput.addEventListener('input', debounce(recompressAllImages, 300));
+
+        resetAllBtn.addEventListener('click', () => {
+            qualityRange.value = 80;
+            qualityVal.textContent = '80%';
+            formatSelect.value = 'original';
+            maxWidthInput.value = '';
+            maxHeightInput.value = '';
+            recompressAllImages();
+        });
+
+        clearAllImagesBtn.addEventListener('click', () => {
+            imagesData = [];
+            renderImageList();
+        });
+
+        downloadAllBtn.addEventListener('click', () => {
+            imagesData.forEach(imgObj => {
+                if (imgObj.compressedUrl) {
+                    downloadImage(imgObj.compressedUrl, imgObj.outputFileName);
+                }
+            });
+        });
+
+        // Utility: Format File Sizes
+        function formatBytes(bytes, decimals = 2) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        }
+
+        // Handle File Batch Processing
+        function handleFiles(files) {
+            const validTypes = ['image/png', 'image/jpeg', 'image/webp'];
+            
+            Array.from(files).forEach(file => {
+                if (!validTypes.includes(file.type)) {
+                    alert(`Skipped unsupported file format: ${file.name}`);
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const imgObj = {
+                            id: 'img_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                            file: file,
+                            originalUrl: e.target.result,
+                            originalSize: file.size,
+                            originalWidth: img.width,
+                            originalHeight: img.height,
+                            compressedUrl: null,
+                            compressedSize: 0,
+                            compressedWidth: 0,
+                            compressedHeight: 0,
+                            outputFileName: ''
+                        };
+
+                        imagesData.push(imgObj);
+                        compressSingleImage(imgObj);
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Core Canvas Compression Functionality
+        function compressSingleImage(imgObj) {
+            const quality = parseFloat(qualityRange.value) / 100;
+            const targetFormat = formatSelect.value === 'original' ? imgObj.file.type : formatSelect.value;
+            
+            // Calculate Aspect Ratio & Target Dimensions
+            let targetWidth = imgObj.originalWidth;
+            let targetHeight = imgObj.originalHeight;
+
+            const maxW = parseInt(maxWidthInput.value);
+            const maxH = parseInt(maxHeightInput.value);
+
+            if (maxW && targetWidth > maxW) {
+                targetHeight = Math.round((maxH ? Math.min(maxH, targetHeight) : targetHeight) * (maxW / targetWidth));
+                targetWidth = maxW;
+            }
+            if (maxH && targetHeight > maxH) {
+                targetWidth = Math.round(targetWidth * (maxH / targetHeight));
+                targetHeight = maxH;
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
+            const ctx = canvas.getContext('2d');
+
+            // Canvas smooth rendering settings
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+
+            const img = new Image();
+            img.onload = () => {
+                ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+                canvas.toBlob((blob) => {
+                    if (!blob) return;
+
+                    imgObj.compressedSize = blob.size;
+                    imgObj.compressedWidth = targetWidth;
+                    imgObj.compressedHeight = targetHeight;
+                    imgObj.compressedUrl = URL.createObjectURL(blob);
+
+                    // Extension resolution
+                    let ext = 'jpg';
+                    if (targetFormat === 'image/png') ext = 'png';
+                    else if (targetFormat === 'image/webp') ext = 'webp';
+
+                    const baseName = imgObj.file.name.substring(0, imgObj.file.name.lastIndexOf('.')) || imgObj.file.name;
+                    imgObj.outputFileName = `${baseName}_optimized.${ext}`;
+
+                    renderImageList();
+                }, targetFormat, quality);
+            };
+            img.src = imgObj.originalUrl;
+        }
+
+        function recompressAllImages() {
+            imagesData.forEach(imgObj => {
+                compressSingleImage(imgObj);
+            });
+        }
+
+        // Render Live Comparison Cards UI
+        function renderImageList() {
+            if (imagesData.length === 0) {
+                imageListContainer.innerHTML = '';
+                imageListContainer.appendChild(emptyState);
+                batchActionsBar.classList.add('hidden');
+                return;
+            }
+
+            emptyState.remove();
+            batchActionsBar.classList.remove('hidden');
+            batchActionsBar.classList.add('flex');
+
+            // Calculate totals
+            let totalOrig = 0;
+            let totalComp = 0;
+
+            imageListContainer.innerHTML = '';
+
+            imagesData.forEach((imgObj) => {
+                totalOrig += imgObj.originalSize;
+                totalComp += imgObj.compressedSize;
+
+                const savingsBytes = imgObj.originalSize - imgObj.compressedSize;
+                const savingsPercent = Math.max(0, Math.round((savingsBytes / imgObj.originalSize) * 100));
+
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4 transition-all";
+
+                card.innerHTML = `
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <div class="flex items-center space-x-2 truncate max-w-xs sm:max-w-md">
+                            <i class="fa-regular fa-file-image text-brand-500"></i>
+                            <span class="font-semibold text-sm text-slate-800 dark:text-slate-200 truncate">${imgObj.file.name}</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="${savingsBytes > 0 ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300'} text-xs font-bold px-2.5 py-0.5 rounded-full">
+                                ${savingsBytes > 0 ? '-' + savingsPercent + '%' : '0% Size Change'}
+                            </span>
+                            <button onclick="removeImage('${imgObj.id}')" class="text-slate-400 hover:text-red-500 p-1 transition-colors" title="Remove image">
+                                <i class="fa-solid fa-xmark text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Comparison Dual Columns -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Original Image Column -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
+                                <span>Original</span>
+                                <span>${formatBytes(imgObj.originalSize)}</span>
+                            </div>
+                            <div class="checkerboard-bg rounded-xl overflow-hidden h-48 border border-slate-200 dark:border-slate-800 flex items-center justify-center relative">
+                                <img src="${imgObj.originalUrl}" class="max-h-full max-w-full object-contain" alt="Original preview">
+                            </div>
+                            <div class="text-[11px] text-slate-400 text-right">
+                                Dimensions: ${imgObj.originalWidth} x ${imgObj.originalHeight}px
+                            </div>
+                        </div>
+
+                        <!-- Compressed Image Column -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs font-semibold text-brand-600 dark:text-brand-400">
+                                <span>Compressed / Optimized</span>
+                                <span>${formatBytes(imgObj.compressedSize)}</span>
+                            </div>
+                            <div class="checkerboard-bg rounded-xl overflow-hidden h-48 border border-brand-200 dark:border-brand-900/50 flex items-center justify-center relative">
+                                ${imgObj.compressedUrl ? `<img src="${imgObj.compressedUrl}" class="max-h-full max-w-full object-contain" alt="Compressed preview">` : '<div class="text-xs text-slate-400">Processing...</div>'}
+                            </div>
+                            <div class="text-[11px] text-slate-400 text-right">
+                                Dimensions: ${imgObj.compressedWidth} x ${imgObj.compressedHeight}px
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Download Action -->
+                    <div class="flex justify-between items-center pt-2">
+                        <span class="text-xs text-slate-500">
+                            Saved <strong class="text-emerald-600 dark:text-emerald-400">${formatBytes(Math.max(0, savingsBytes))}</strong>
+                        </span>
+                        <button onclick="downloadImage('${imgObj.compressedUrl}', '${imgObj.outputFileName}')" class="px-4 py-2 text-xs font-semibold text-white bg-slate-900 dark:bg-brand-600 hover:bg-slate-800 dark:hover:bg-brand-700 rounded-lg shadow transition-colors flex items-center gap-1.5">
+                            <i class="fa-solid fa-download"></i> Download Image
+                        </button>
+                    </div>
+                `;
+
+                imageListContainer.appendChild(card);
+            });
+
+            // Update Total Savings Counter
+            imageCountBadge.textContent = `${imagesData.length} ${imagesData.length === 1 ? 'Image' : 'Images'}`;
+            const totalSavedBytes = totalOrig - totalComp;
+            totalSavingsText.textContent = `Total Saved: ${formatBytes(Math.max(0, totalSavedBytes))}`;
+        }
+
+        // Global Utility Functions
+        window.removeImage = function(id) {
+            imagesData = imagesData.filter(img => img.id !== id);
+            renderImageList();
+        };
+
+        window.downloadImage = function(url, filename) {
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        // Debounce helper function for input events
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+    </script>
+</body>
+</html>
